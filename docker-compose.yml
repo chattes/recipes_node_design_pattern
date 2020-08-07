@@ -1,0 +1,46 @@
+version: "2.2"
+services:
+  app:
+    restart: always
+    build: .
+    ports:
+      - 9229:9229
+      - 3000:3000
+    expose:
+      - "3000"
+    links:
+      - db
+    depends_on:
+      - db
+    command: npm run install-start
+    mem_limit: 300M
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:5432/cheappr
+    volumes:
+      - npm-cache:/home/nodejs/.npm
+      - .:/home/nodejs/app
+      - /home/nodejs/app/node_modules
+  db:
+    image: postgres:9.6.2-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=jobget
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 3004:8080
+    expose:
+      - "8080"
+volumes:
+  npm-cache:
+    external: false
+  pgdata:
+    external: false
+  certs:
+  html:
+  vhost:
+
