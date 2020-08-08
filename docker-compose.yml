@@ -15,7 +15,7 @@ services:
     command: npm run install-start
     mem_limit: 300M
     environment:
-      - DATABASE_URL=postgres://postgres:password@db:5432/cheappr
+      - DATABASE_URL=postgres://postgres:password@db:5432/jobget
     volumes:
       - npm-cache:/home/nodejs/.npm
       - .:/home/nodejs/app
@@ -43,4 +43,3 @@ volumes:
   certs:
   html:
   vhost:
-

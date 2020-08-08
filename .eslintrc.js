@@ -5,11 +5,14 @@ module.exports = {
     es2020: true
   },
   extends: [
-    'standard'
+    'standard',
+    'prettier'
   ],
+  plugins: ['prettier'],
   parserOptions: {
     ecmaVersion: 11
   },
   rules: {
+    "prettier/prettier": ["error"]
   }
 }
