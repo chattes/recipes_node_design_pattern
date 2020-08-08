@@ -70,8 +70,9 @@ const insert = async (dbname, data, defaults = {}) => {
       } else {
         throw new Error('Error creating Recipes');
       }
-    case 'rating':
-      return Rating.create(data);
+    case 'ratings':
+      await Rating.create(data);
+      break;
     default:
       throw new Error('Database not found');
   }

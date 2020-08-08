@@ -4,6 +4,7 @@ const {
   read,
   destroy,
   update,
+  insert,
 } = require('../model');
 const get = async () => {
   return await read({ dbName: 'recipe' });
@@ -41,6 +42,16 @@ const purgeRecipe = async (id) => {
   }
 };
 
+const rate = async (data, id) => {
+  try {
+    const ratingData = { ...data, ...{ recipeId: id } };
+    await insert('ratings', ratingData);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 const search = async (search) => {};
 
 module.exports = {
@@ -50,4 +61,5 @@ module.exports = {
   updateRecipe,
   purgeRecipe,
   search,
+  rate,
 };

@@ -7,6 +7,7 @@ const {
   create,
   updateRecipe,
   purgeRecipe,
+  rate,
 } = require('../controllers/recipes');
 var matched = false;
 
@@ -103,7 +104,18 @@ const all_routes = [
   matcher(
     '/recipes/:id/rating',
     'POST',
-    (params, req, sendResponse) => console.log('Rate Recipe By Id'),
+    async (params, req, sendResponse) => {
+      let { id, data } = params;
+      data = JSON.parse(data);
+      let success = await rate(data, id);
+      if (success) return sendResponse(200, { data: 'success' });
+      sendResponse(400, { error: 'Unable to rate' });
+    },
+  ),
+  matcher(
+    '/recipes/search',
+    'GET',
+    async (params, req, sendResponse) => {},
   ),
 ];
 const handler = async (req, res) => {
