@@ -1,6 +1,7 @@
 const http = require('http');
 const glob = require('glob');
 const { send } = require('./utils/response');
+const url = require('url');
 const models = require('./model');
 
 let module_dict = {};
@@ -27,11 +28,12 @@ http
 
 const request_handler = async (req, res) => {
   const sendResponse = send(res);
-  if (req.url === '/') {
+  const path = url.parse(req.url).pathname;
+  if (path === '/') {
     sendResponse(200, { data: 'welcome to JobGet' });
   }
 
-  const handler = module_dict[req.url.split('/')[1]];
+  const handler = module_dict[path.split('/')[1]];
   if (!handler) {
     sendResponse(500, { error: 'Invalid Route' });
     return;

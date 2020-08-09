@@ -6,6 +6,9 @@ const {
   update,
   insert,
 } = require('../model');
+const Db = require('../model/database');
+const { Sequelize } = Db;
+const { Op } = Sequelize;
 const get = async () => {
   return await read({ dbName: 'recipe' });
 };
@@ -52,7 +55,20 @@ const rate = async (data, id) => {
   }
 };
 
-const search = async (search) => {};
+const search = async (search) => {
+  try {
+    const { qs } = search;
+    const results = await read({
+      dbName: 'recipe',
+      where: { name: { [Op.like]: `%${qs}%` } },
+      limit: 20,
+    });
+    return results;
+  } catch (error) {
+    console.log('Error occured while searching');
+    return [];
+  }
+};
 
 module.exports = {
   get,

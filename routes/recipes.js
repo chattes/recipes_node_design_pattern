@@ -12,7 +12,6 @@ const {
 var matched = false;
 
 const { parser } = require('../utils/request');
-const { match } = require('assert');
 const getPostData = (req) => {
   return new Promise((resolve, reject) => {
     try {
@@ -47,7 +46,7 @@ const matcher = (url, verb, callback) => async ({
 const all_routes = [
   matcher('/recipes', 'GET', async (params, req, sendResponse) => {
     const recipes = await get();
-    sendResponse(200, JSON.stringify(recipes));
+    sendResponse(200, { data: recipes });
   }),
   matcher('/recipes', 'POST', async (params, req, sendResponse) => {
     console.log('Create Recipes ', JSON.parse(params.data));
@@ -65,7 +64,7 @@ const all_routes = [
     'GET',
     async (params, req, sendResponse) => {
       const recipe = await get_by_id(params.id);
-      return sendResponse(200, JSON.stringify(recipe));
+      return sendResponse(200, { data: recipe });
     },
   ),
   matcher(
@@ -111,11 +110,6 @@ const all_routes = [
       if (success) return sendResponse(200, { data: 'success' });
       sendResponse(400, { error: 'Unable to rate' });
     },
-  ),
-  matcher(
-    '/recipes/search',
-    'GET',
-    async (params, req, sendResponse) => {},
   ),
 ];
 const handler = async (req, res) => {

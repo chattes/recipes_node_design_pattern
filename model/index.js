@@ -123,6 +123,7 @@ const read = async ({
         const queryResults = await Recipe.findAll({
           attributes,
           where,
+          limit,
         });
         return queryResults;
     }
