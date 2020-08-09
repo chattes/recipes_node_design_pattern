@@ -141,8 +141,11 @@ const readById = async ({ dbName, id }) => {
 
 const rawquery = async (query) => await sequelize.query(query);
 
+const destroyModels = () => {};
+
 module.exports = {
   createModels,
+  destroyModels,
   insert,
   update,
   rawquery,

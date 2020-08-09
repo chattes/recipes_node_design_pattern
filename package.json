@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=development nodemon --inspect=0.0.0.0:9229 index.js",
-    "install-start": "npm install && npm start && npm test",
-    "test": "jest"
+    "start-test": "NODE_ENV=development nodemon index.js",
+    "install-start": "npm install && npm start",
+    "test": "npx jest",
+    "test:watch": "npm install && npx jest --watchAll"
   },
   "repository": {
     "type": "git",
