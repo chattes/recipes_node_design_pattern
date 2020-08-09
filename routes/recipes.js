@@ -1,6 +1,7 @@
 const { send } = require('../utils/response');
 const url = require('url');
 const routeMatcher = require('route-matcher').routeMatcher;
+const jwt = require('jsonwebtoken');
 const {
   get,
   get_by_id,
@@ -11,24 +12,26 @@ const {
 } = require('../controllers/recipes');
 var matched = false;
 
-const { parser } = require('../utils/request');
-const getPostData = (req) => {
-  return new Promise((resolve, reject) => {
-    try {
-      let body = '';
-      req.on('data', (chunk) => {
-        body += chunk.toString(); // convert Buffer to string
-      });
+const { parser, getPostData } = require('../utils/request');
+const checkToken = (req) => {
+  try {
+    const header = req.headers['authorization'];
 
-      req.on('end', () => {
-        //resolve(parse(body));
-        resolve(body);
-      });
-    } catch (e) {
-      reject(e);
+    if (!header) return false;
+
+    const bearer = header.split(' ');
+    const token = bearer[1];
+
+    const { _user } = jwt.verify(token, 'secret');
+    if (_user && _user === 'JOBGET') {
+      return true;
     }
-  });
+    return false;
+  } catch (error) {
+    return false;
+  }
 };
+
 const matcher = (url, verb, callback) => async ({
   req,
   sendResponse,
@@ -49,6 +52,9 @@ const all_routes = [
     sendResponse(200, { data: recipes });
   }),
   matcher('/recipes', 'POST', async (params, req, sendResponse) => {
+    let authorized = checkToken(req);
+    if (!authorized)
+      return sendResponse(403, { data: 'Unauthorized' });
     console.log('Create Recipes ', JSON.parse(params.data));
     let recipeData = JSON.parse(params.data);
     if (!Array.isArray(recipeData)) {
@@ -71,6 +77,9 @@ const all_routes = [
     '/recipes/:id',
     'PUT',
     async (params, req, sendResponse) => {
+      let authorized = checkToken(req);
+      if (!authorized)
+        return sendResponse(403, { data: 'Unauthorized' });
       let updated = await updateRecipe(
         JSON.parse(params.data),
         params.id,
@@ -83,6 +92,9 @@ const all_routes = [
     '/recipes/:id',
     'PATCH',
     async (params, req, sendResponse) => {
+      let authorized = checkToken(req);
+      if (!authorized)
+        return sendResponse(403, { data: 'Unauthorized' });
       let updated = await updateRecipe(
         JSON.parse(params.data),
         params.id,
@@ -95,6 +107,9 @@ const all_routes = [
     '/recipes/:id',
     'DELETE',
     async (params, req, sendResponse) => {
+      let authorized = checkToken(req);
+      if (!authorized)
+        return sendResponse(403, { data: 'Unauthorized' });
       let deleted = await purgeRecipe(params.id);
       if (deleted) return sendResponse(200, { data: 'success' });
       sendResponse(400, { error: 'Unable to Delete Recipe' });
