@@ -42,12 +42,8 @@ Recipe.hasMany(Rating);
 
 const createModels = async () => {
   await sequelize.authenticate();
-  console.log('>>>>>>>Database Connected<<<<<<<<<<');
-  console.log('>>>>>>>Create Tables<<<<<<<<<<');
   await Recipe.sync();
-  console.log('>>>>>>>Table Recipe Created<<<<<<<');
   await Rating.sync();
-  console.log('>>>>>>>Table Rating Created<<<<<<<');
 };
 
 const insert = async (dbname, data, defaults = {}) => {
@@ -141,7 +137,9 @@ const readById = async ({ dbName, id }) => {
 
 const rawquery = async (query) => await sequelize.query(query);
 
-const destroyModels = () => {};
+const destroyModels = async () => {
+  await sequelize.sync({ force: true });
+};
 
 module.exports = {
   createModels,

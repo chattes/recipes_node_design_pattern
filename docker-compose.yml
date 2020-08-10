@@ -1,4 +1,4 @@
-version: '2.2'
+version: "2.2"
 services:
   app:
     restart: always
@@ -7,7 +7,7 @@ services:
       - 9229:9229
       - 3000:3000
     expose:
-      - '3000'
+      - "3000"
     links:
       - db
     depends_on:
@@ -27,7 +27,7 @@ services:
     ports:
       - 3001:3001
     expose:
-      - '3001'
+      - "3001"
     links:
       - db
     depends_on:
@@ -44,6 +44,8 @@ services:
   db:
     image: postgres:9.6.2-alpine
     restart: always
+    logging:
+      driver: none
     volumes:
       - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
     environment:
@@ -56,7 +58,7 @@ services:
     ports:
       - 3004:8080
     expose:
-      - '8080'
+      - "8080"
 volumes:
   npm-cache:
     external: false
