@@ -37,7 +37,7 @@ An endpoint for recipe search functionality **MUST** also be implemented. The HT
 Additionally, recipes can be rated many times from 1-5 and a rating is never overwritten.
 
 
-#### Running the Solution
+### Running the Solution
 
 The application is Containerized.
 
