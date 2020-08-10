@@ -94,3 +94,10 @@ curl --request POST \
 ```
 
 
+##### Database Administration
+
+You can Administer the database using **Adminer**
+
+`http://localhost:3004`
+
+
