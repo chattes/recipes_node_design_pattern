@@ -26,7 +26,6 @@ describe('create recipes', () => {
       .send({ user: 'JOBGET' })
       .set('Accept', 'application/json');
     let token = JSON.parse(res.text);
-    console.log(token);
 
     expect(status).toBe(200);
     done();
@@ -36,8 +35,6 @@ describe('create recipes', () => {
       .post('/auth/token')
       .send({ user: 'Random Name' })
       .set('Accept', 'application/json');
-    let { token } = JSON.parse(res.text);
-    console.log(token);
 
     expect(status).toBe(401);
     done();
@@ -63,6 +60,48 @@ describe('create recipes', () => {
       });
 
     expect(createRes.status).toBe(200);
+    done();
+  });
+  it('Should Get All the Recipes', async (done) => {
+    let { res, status } = await request
+      .post('/auth/token')
+      .send({ user: 'JOBGET' })
+      .set('Accept', 'application/json');
+
+    let { token } = JSON.parse(res.text);
+
+    let getRecipes = await request
+      .get('/recipes')
+      .set('Accept', 'application/json');
+
+    let { res: resGet } = getRecipes;
+    let testRes = JSON.parse(resGet.text);
+
+    expect(testRes.data.length).toBe(1);
+    done();
+  });
+  it('Should Delete Recipes', async (done) => {
+    let { res, status } = await request
+      .post('/auth/token')
+      .send({ user: 'JOBGET' })
+      .set('Accept', 'application/json');
+
+    let { token } = JSON.parse(res.text);
+
+    let getRecipes = await request
+      .get('/recipes')
+      .set('Accept', 'application/json');
+
+    let { res: resGet } = getRecipes;
+    let testRes = JSON.parse(resGet.text);
+    const recipe = testRes.data[0];
+
+    let deleteRes = await request
+      .delete(`/recipes/${recipe.id}`)
+      .set('authorization', `Bearer ${token}`)
+      .set('Accept', 'application/json');
+
+    expect(deleteRes.status).toBe(200);
     done();
   });
 });
