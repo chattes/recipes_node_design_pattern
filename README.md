@@ -74,6 +74,8 @@ The Search will match partial strings and return result.
 
 To access protected routes.
 > Generate a JWT Token by calling `/auth/token` route and pass in the `user`
+
+
 | Name   | Method      | URL                    | Protected |
 | ---    | ---         | ---                    | ---       |
 | Auth   | `POST`      | `/auth/token`          |           |
