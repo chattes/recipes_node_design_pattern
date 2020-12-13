@@ -52,7 +52,7 @@ return function makeRecipes({
         draft: () => published = false,
         addTags: newTags => {
             if(!Array.isArray(tags)) throw new Error("Invalid format for tags")
-            tags = [...tags, newTags]
+            tags = [...tags, ...newTags]
         },
         changeCategory: categoryNew => category = categoryNew,
     })
